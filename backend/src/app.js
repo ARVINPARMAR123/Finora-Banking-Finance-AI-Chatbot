@@ -1,5 +1,7 @@
 import express from "express";
 
+import healthRoutes from "./routes/health.route.js";
+
 const app = express();
 
 // Middleware to read JSON request bodies
@@ -12,5 +14,8 @@ app.get("/", (req, res) => {
     message: "Banking & Finance AI Chatbot Backend is running!",
   });
 });
+
+// Health check API
+app.use("/api/health", healthRoutes);
 
 export default app;
