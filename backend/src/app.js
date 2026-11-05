@@ -1,6 +1,7 @@
 import express from "express";
 
 import healthRoutes from "./routes/health.route.js";
+import chatRoutes from "./routes/chat.route.js";
 
 import {
   helmetMiddleware,
@@ -15,7 +16,6 @@ app.disable("x-powered-by");
 
 // Security middleware
 app.use(helmetMiddleware);
-
 app.use(corsMiddleware);
 
 // Request body parser
@@ -34,5 +34,8 @@ app.get("/", (req, res) => {
 
 // Health check API
 app.use("/api/health", healthRoutes);
+
+// Chatbot validation API
+app.use("/api/chat", chatRoutes);
 
 export default app;
