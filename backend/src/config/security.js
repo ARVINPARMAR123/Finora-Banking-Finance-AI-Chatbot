@@ -1,6 +1,6 @@
 import helmet from "helmet";
 import cors from "cors";
-import { generalLimiter } from "../middlewares/rateLimit.middleware.js";
+import { generalLimiter } from "../middleware/rateLimit.middleware.js";
 
 // Allowed frontend origins
 const allowedOrigins = [
