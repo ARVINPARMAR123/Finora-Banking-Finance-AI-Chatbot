@@ -1,17 +1,18 @@
 {
   "name": "banking-finance-ai-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Backend for Banking and Finance AI Chatbot",
+  "main": "src/app.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "node src/app.js",
     "dev": "nodemon src/server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Arvin Parmar",
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@google/genai": "^2.32.0",
     "cors": "^2.8.6",
     "dotenv": "^18.0.9",
     "express": "^5.3.0",
