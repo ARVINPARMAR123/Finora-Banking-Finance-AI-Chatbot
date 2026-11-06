@@ -2,6 +2,7 @@ import express from "express";
 
 import healthRoutes from "./routes/health.route.js";
 import chatRoutes from "./routes/chat.route.js";
+import emiRoutes from "./routes/emi.route.js";
 
 import {
   helmetMiddleware,
@@ -37,5 +38,8 @@ app.use("/api/health", healthRoutes);
 
 // Chatbot validation API
 app.use("/api/chat", chatRoutes);
+
+// EMI Calculator API
+app.use("/api/emi", emiRoutes);
 
 export default app;
