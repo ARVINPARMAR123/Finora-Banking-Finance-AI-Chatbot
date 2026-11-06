@@ -1,9 +1,10 @@
 import { generateBankingResponse } from "../services/gemini.service.js";
+import { classifyGeminiError } from "../utils/geminiError.utils.js";
 
 // Handle chatbot requests.
 export const handleChat = async (req, res) => {
   try {
-    // Get validated message
+    // Get validated user message
     const { message } = req.validatedBody;
 
     // Generate Gemini response
@@ -18,28 +19,20 @@ export const handleChat = async (req, res) => {
       },
     });
   } catch (error) {
-    // Handle empty AI response
-    if (error.message === "EMPTY_GEMINI_RESPONSE") {
-      return res.status(502).json({
-        success: false,
-        code: "EMPTY_AI_RESPONSE",
-        message:
-          "The AI service could not generate a response. Please try again.",
-      });
-    }
+    // Classify Gemini error
+    const errorDetails = classifyGeminiError(error);
 
-    // Log error status only, not user messages or credentials
+    // Log only safe error metadata
     console.error(
-      "Gemini API error:",
-      error.status || error.code || "UNKNOWN_ERROR",
+      "Gemini request failed:",
+      error.status || error.name || "UNKNOWN_ERROR",
     );
 
-    // Handle Gemini API failure
-    return res.status(503).json({
+    // Return safe error response
+    return res.status(errorDetails.statusCode).json({
       success: false,
-      code: "AI_SERVICE_UNAVAILABLE",
-      message:
-        "Our banking assistant is temporarily unavailable. Please try again later.",
+      code: errorDetails.code,
+      message: errorDetails.message,
     });
   }
 };
