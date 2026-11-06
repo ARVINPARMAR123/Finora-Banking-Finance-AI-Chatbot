@@ -4,6 +4,7 @@ import healthRoutes from "./routes/health.route.js";
 import chatRoutes from "./routes/chat.route.js";
 import emiRoutes from "./routes/emi.route.js";
 import simpleInterestRoutes from "./routes/simpleInterest.route.js";
+import compoundInterestRoutes from "./routes/compoundInterest.route.js";
 
 import {
   helmetMiddleware,
@@ -45,5 +46,8 @@ app.use("/api/emi", emiRoutes);
 
 // Simple Interest Calculator API
 app.use("/api/interest", simpleInterestRoutes);
+
+// Compound Interest Calculator API
+app.use("/api/interest", compoundInterestRoutes);
 
 export default app;
