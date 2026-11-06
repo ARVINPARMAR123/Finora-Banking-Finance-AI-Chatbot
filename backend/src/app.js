@@ -5,6 +5,7 @@ import chatRoutes from "./routes/chat.route.js";
 import emiRoutes from "./routes/emi.route.js";
 import simpleInterestRoutes from "./routes/simpleInterest.route.js";
 import compoundInterestRoutes from "./routes/compoundInterest.route.js";
+import budgetRoutes from "./routes/budget.route.js";
 
 import {
   helmetMiddleware,
@@ -49,5 +50,8 @@ app.use("/api/interest", simpleInterestRoutes);
 
 // Compound Interest Calculator API
 app.use("/api/interest", compoundInterestRoutes);
+
+// Budget Assistance API
+app.use("/api/budget", budgetRoutes);
 
 export default app;
