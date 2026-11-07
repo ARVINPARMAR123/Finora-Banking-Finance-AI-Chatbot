@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#10151c" />
+
+    <title>Finora - Banking & Finance Assistant</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="./src/css/output.css" />
+  </head>
+
+  <body class="min-h-screen overflow-hidden">
+    <div class="flex h-screen">
+      <!-- Mobile sidebar backdrop -->
+      <div
+        id="sidebarBackdrop"
+        class="fixed inset-0 z-30 hidden bg-black/60 md:hidden"
+      ></div>
+
+      <!-- Sidebar -->
+      <aside
+        id="sidebar"
+        class="fixed inset-y-0 left-0 z-40 flex w-72 -translate-x-full flex-col border-r border-[#26313d] bg-[#151c25] transition-transform duration-300 md:static md:translate-x-0"
+      >
+        <!-- Brand -->
+        <div
+          class="flex items-center gap-3 border-b border-[#26313d] px-6 py-5"
+        >
+          <div
+            class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#1d4946] text-[#8ee0d1]"
+          >
+            <svg
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3 9h18L12 3 3 9Zm2 0v10m5-10v10m4-10v10m5-10v10M3 21h18M2 19h20"
+              />
+            </svg>
+          </div>
+
+          <div>
+            <h1 class="text-lg font-bold tracking-wide text-white">Finora</h1>
+            <p class="text-xs text-slate-400">Finance Assistant</p>
+          </div>
+
+          <button
+            id="closeSidebar"
+            class="ml-auto text-slate-400 hover:text-white md:hidden"
+            aria-label="Close menu"
+          >
+            ✕
+          </button>
+        </div>
+
+        <!-- New chat -->
+        <div class="p-4">
+          <button
+            id="newChatButton"
+            class="flex w-full items-center justify-center gap-2 rounded-xl bg-[#286b65] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#328078]"
+          >
+            <span class="text-lg">+</span>
+            New conversation
+          </button>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 space-y-7 overflow-y-auto px-4 py-2">
+          <div>
+            <p
+              class="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-500"
+            >
+              Workspace
+            </p>
+
+            <a
+              href="#"
+              class="flex items-center gap-3 rounded-lg bg-[#263a40] px-3 py-2.5 text-sm font-medium text-[#9de0d4]"
+            >
+              <span>◈</span>
+              AI Assistant
+            </a>
+
+            <a
+              href="#tools"
+              class="mt-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-400 transition hover:bg-[#202a35] hover:text-white"
+            >
+              <span>▦</span>
+              Finance tools
+            </a>
+
+            <a
+              href="#quick-questions"
+              class="mt-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-400 transition hover:bg-[#202a35] hover:text-white"
+            >
+              <span>◷</span>
+              Financial FAQs
+            </a>
+
+            <a
+              href="#safety"
+              class="mt-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-400 transition hover:bg-[#202a35] hover:text-white"
+            >
+              <span>◇</span>
+              Safety centre
+            </a>
+          </div>
+
+          <div>
+            <p
+              class="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-500"
+            >
+              Recent activity
+            </p>
+
+            <p class="rounded-lg px-3 py-2 text-sm text-slate-500">
+              No conversations yet
+            </p>
+          </div>
+        </nav>
+
+        <!-- Sidebar footer -->
+        <div class="border-t border-[#26313d] p-4">
+          <div class="flex items-center gap-3 rounded-xl bg-[#202a35] p-3">
+            <div
+              class="flex h-9 w-9 items-center justify-center rounded-full bg-[#315b57] text-sm font-bold text-[#b4eee4]"
+            >
+              F
+            </div>
+            <div>
+              <p class="text-sm font-medium text-slate-200">
+                Finance Assistant
+              </p>
+              <p class="text-xs text-slate-500">Always here to help</p>
+            </div>
+            <span class="ml-auto h-2 w-2 rounded-full bg-emerald-400"></span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main class="flex min-w-0 flex-1 flex-col">
+        <!-- Header -->
+        <header
+          class="flex h-18 shrink-0 items-center justify-between border-b border-[#26313d] bg-[#10151c] px-5 md:px-8"
+        >
+          <div class="flex items-center gap-3">
+            <button
+              id="openSidebar"
+              class="rounded-lg p-2 text-slate-300 hover:bg-[#202a35] md:hidden"
+              aria-label="Open menu"
+            >
+              ☰
+            </button>
+
+            <div>
+              <h2 class="text-sm font-semibold text-white md:text-base">
+                Banking & Finance Assistant
+              </h2>
+              <p class="mt-0.5 text-xs text-slate-500">
+                Your everyday financial companion
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <!-- Theme Toggle -->
+            <button
+              id="themeToggle"
+              type="button"
+              class="flex h-10 w-10 items-center justify-center rounded-xl border border-[#34424f] bg-[#19222c] text-lg text-slate-300 transition hover:bg-[#263542]"
+              aria-label="Switch theme"
+              title="Switch theme"
+            >
+              <span id="themeIcon">☀</span>
+            </button>
+
+            <!-- Online Status -->
+            <div
+              class="flex items-center gap-2 rounded-full border border-[#263b39] bg-[#172b2a] px-3 py-1.5"
+            >
+              <span class="h-2 w-2 rounded-full bg-emerald-400"></span>
+              <span class="text-xs font-medium text-[#9de0d4]">Online</span>
+            </div>
+          </div>
+        </header>
+
+        <!-- Scrollable area -->
+        <section class="flex-1 overflow-y-auto">
+          <div class="mx-auto w-full max-w-5xl px-5 py-10 md:px-10 md:py-14">
+            <!-- Welcome -->
+            <div class="mx-auto max-w-3xl text-center">
+              <div
+                class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-[#315b57] bg-[#1b3533] text-[#9de0d4] shadow-lg shadow-black/20"
+              >
+                <svg
+                  class="h-8 w-8"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 3v2m0 14v2M3 12h2m14 0h2M5.64 5.64l1.42 1.42m9.88 9.88 1.42 1.42m0-12.72-1.42 1.42m-9.88 9.88-1.42 1.42M8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z"
+                  />
+                </svg>
+              </div>
+
+              <p class="mb-3 text-sm font-medium text-[#91d6ca]">
+                SMARTER FINANCIAL DECISIONS START HERE
+              </p>
+
+              <h2
+                class="text-3xl font-bold leading-tight tracking-tight text-white md:text-5xl"
+              >
+                Your money questions,
+                <span class="text-[#83cfc1]">made simpler.</span>
+              </h2>
+
+              <p
+                class="mx-auto mt-5 max-w-xl text-sm leading-7 text-slate-400 md:text-base"
+              >
+                Ask questions about banking, loans, savings and personal
+                finance. Get clear, simple and helpful guidance whenever you
+                need it.
+              </p>
+            </div>
+
+            <!-- Suggested questions -->
+            <div id="quick-questions" class="mx-auto mt-12 max-w-3xl">
+              <div class="mb-4 flex items-center justify-between">
+                <h3 class="text-sm font-semibold text-slate-200">
+                  Try asking something
+                </h3>
+                <span class="text-xs text-slate-500">Suggested questions</span>
+              </div>
+
+              <div class="grid gap-3 sm:grid-cols-2">
+                <button
+                  data-prompt="What is the difference between a savings account and a current account?"
+                  class="prompt-card rounded-xl border border-[#293542] bg-[#171f29] p-4 text-left transition hover:border-[#477d75] hover:bg-[#1c2b31]"
+                >
+                  <span class="text-lg text-[#8dd7c9]">◈</span>
+                  <p class="mt-3 text-sm font-medium text-slate-200">
+                    Banking basics
+                  </p>
+                  <p class="mt-1 text-xs leading-5 text-slate-500">
+                    Understand different bank accounts
+                  </p>
+                </button>
+
+                <button
+                  data-prompt="How can I calculate my monthly loan EMI?"
+                  class="prompt-card rounded-xl border border-[#293542] bg-[#171f29] p-4 text-left transition hover:border-[#477d75] hover:bg-[#1c2b31]"
+                >
+                  <span class="text-lg text-[#8dd7c9]">▤</span>
+                  <p class="mt-3 text-sm font-medium text-slate-200">
+                    Loan assistance
+                  </p>
+                  <p class="mt-1 text-xs leading-5 text-slate-500">
+                    Learn about EMI and loan payments
+                  </p>
+                </button>
+
+                <button
+                  data-prompt="How can I create a monthly budget?"
+                  class="prompt-card rounded-xl border border-[#293542] bg-[#171f29] p-4 text-left transition hover:border-[#477d75] hover:bg-[#1c2b31]"
+                >
+                  <span class="text-lg text-[#8dd7c9]">◫</span>
+                  <p class="mt-3 text-sm font-medium text-slate-200">
+                    Budget planning
+                  </p>
+                  <p class="mt-1 text-xs leading-5 text-slate-500">
+                    Manage income and expenses
+                  </p>
+                </button>
+
+                <button
+                  data-prompt="How can I identify and avoid UPI payment scams?"
+                  class="prompt-card rounded-xl border border-[#293542] bg-[#171f29] p-4 text-left transition hover:border-[#477d75] hover:bg-[#1c2b31]"
+                >
+                  <span class="text-lg text-[#8dd7c9]">◇</span>
+                  <p class="mt-3 text-sm font-medium text-slate-200">
+                    Fraud awareness
+                  </p>
+                  <p class="mt-1 text-xs leading-5 text-slate-500">
+                    Learn how to stay financially safe
+                  </p>
+                </button>
+              </div>
+            </div>
+
+            <!-- Finance tools -->
+            <div id="tools" class="mx-auto mt-12 max-w-3xl">
+              <div class="mb-4">
+                <h3 class="text-sm font-semibold text-slate-200">
+                  Explore finance tools
+                </h3>
+                <p class="mt-1 text-xs text-slate-500">
+                  Useful calculators for everyday financial planning
+                </p>
+              </div>
+
+              <div class="grid gap-3 sm:grid-cols-3">
+                <div
+                  class="rounded-xl border border-[#293542] bg-[#171f29] p-4"
+                >
+                  <span class="text-xl text-[#8dd7c9]">₹</span>
+                  <h4 class="mt-3 text-sm font-semibold text-slate-200">
+                    EMI Calculator
+                  </h4>
+                  <p class="mt-1 text-xs leading-5 text-slate-500">
+                    Estimate monthly loan payments.
+                  </p>
+                </div>
+
+                <div
+                  class="rounded-xl border border-[#293542] bg-[#171f29] p-4"
+                >
+                  <span class="text-xl text-[#8dd7c9]">%</span>
+                  <h4 class="mt-3 text-sm font-semibold text-slate-200">
+                    Interest Calculator
+                  </h4>
+                  <p class="mt-1 text-xs leading-5 text-slate-500">
+                    Calculate simple and compound interest.
+                  </p>
+                </div>
+
+                <div
+                  class="rounded-xl border border-[#293542] bg-[#171f29] p-4"
+                >
+                  <span class="text-xl text-[#8dd7c9]">▥</span>
+                  <h4 class="mt-3 text-sm font-semibold text-slate-200">
+                    Budget Planner
+                  </h4>
+                  <p class="mt-1 text-xs leading-5 text-slate-500">
+                    Understand your monthly budget.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Safety information -->
+            <div
+              id="safety"
+              class="mx-auto mt-8 max-w-3xl rounded-xl border border-[#3b3b30] bg-[#24251f] p-4"
+            >
+              <div class="flex items-start gap-3">
+                <span class="text-xl text-amber-300">!</span>
+                <div>
+                  <h3 class="text-sm font-semibold text-amber-100">
+                    Your financial safety matters
+                  </h3>
+                  <p class="mt-1 text-xs leading-5 text-slate-400">
+                    Never share your OTP, UPI PIN, ATM PIN, CVV or banking
+                    password. Our assistant will never ask you for these
+                    details.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chat messages will appear here -->
+            <div
+              id="chatMessages"
+              class="mx-auto mt-8 hidden max-w-3xl space-y-4"
+            ></div>
+          </div>
+        </section>
+
+        <!-- Message composer -->
+        <footer
+          class="shrink-0 border-t border-[#26313d] bg-[#10151c] px-5 py-5 md:px-8"
+        >
+          <div class="mx-auto max-w-3xl">
+            <form
+              id="chatForm"
+              class="rounded-2xl border border-[#34424f] bg-[#19222c] p-2 transition focus-within:border-[#4c9186]"
+            >
+              <textarea
+                id="messageInput"
+                rows="1"
+                maxlength="2000"
+                placeholder="Ask anything about banking or finance..."
+                aria-label="Your message"
+                class="max-h-32 min-h-12 w-full resize-none bg-transparent px-3 py-3 text-sm text-slate-100 outline-none placeholder:text-slate-500"
+              ></textarea>
+
+              <div
+                class="flex items-center justify-between border-t border-[#2b3743] px-2 pt-2"
+              >
+                <p class="text-xs text-slate-500">
+                  Keep your financial information private.
+                </p>
+
+                <button
+                  type="submit"
+                  class="flex items-center gap-2 rounded-xl bg-[#286b65] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#328078] disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Send
+                  <svg
+                    class="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="m5 12 14-7-4 14-3-6-7-1Z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </form>
+
+            <p class="mt-3 text-center text-[11px] leading-5 text-slate-600">
+              Finora can make mistakes. Verify important financial information
+              with your bank or a qualified professional.
+            </p>
+          </div>
+        </footer>
+      </main>
+    </div>
+
+    <script src="./src/js/app.js"></script>
+  </body>
+</html>
