@@ -8,6 +8,7 @@ import compoundInterestRoutes from "./routes/compoundInterest.route.js";
 import budgetRoutes from "./routes/budget.route.js";
 import faqRoutes from "./routes/faq.route.js";
 import safetyRoutes from "./routes/safety.route.js";
+import loanEligibilityRoutes from "./routes/loanEligibility.route.js";
 
 import {
   helmetMiddleware,
@@ -61,5 +62,8 @@ app.use("/api/faq", faqRoutes);
 
 // Financial Safety and Scam Awareness API
 app.use("/api/safety", safetyRoutes);
+
+// Loan Eligibility Calculator API
+app.use("/api/loan-eligibility", loanEligibilityRoutes);
 
 export default app;
