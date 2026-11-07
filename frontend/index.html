@@ -86,49 +86,37 @@
               Workspace
             </p>
 
-            <a
-              href="#"
-              class="flex items-center gap-3 rounded-lg bg-[#263a40] px-3 py-2.5 text-sm font-medium text-[#9de0d4]"
+            <button
+              data-view="chat"
+              class="nav-item flex w-full items-center gap-3 rounded-lg bg-[#263a40] px-3 py-2.5 text-left text-sm font-medium text-[#9de0d4]"
             >
               <span>◈</span>
               AI Assistant
-            </a>
+            </button>
 
-            <a
-              href="#tools"
-              class="mt-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-400 transition hover:bg-[#202a35] hover:text-white"
+            <button
+              data-view="finance"
+              class="nav-item mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm text-slate-400 transition hover:bg-[#202a35] hover:text-white"
             >
               <span>▦</span>
-              Finance tools
-            </a>
+              Finance Tools
+            </button>
 
-            <a
-              href="#quick-questions"
-              class="mt-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-400 transition hover:bg-[#202a35] hover:text-white"
+            <button
+              data-view="faq"
+              class="nav-item mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm text-slate-400 transition hover:bg-[#202a35] hover:text-white"
             >
               <span>◷</span>
               Financial FAQs
-            </a>
+            </button>
 
-            <a
-              href="#safety"
-              class="mt-1 flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-400 transition hover:bg-[#202a35] hover:text-white"
+            <button
+              data-view="safety"
+              class="nav-item mt-1 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm text-slate-400 transition hover:bg-[#202a35] hover:text-white"
             >
               <span>◇</span>
-              Safety centre
-            </a>
-          </div>
-
-          <div>
-            <p
-              class="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-slate-500"
-            >
-              Recent activity
-            </p>
-
-            <p class="rounded-lg px-3 py-2 text-sm text-slate-500">
-              No conversations yet
-            </p>
+              Safety Centre
+            </button>
           </div>
         </nav>
 
@@ -198,193 +186,353 @@
           </div>
         </header>
 
-        <!-- Scrollable area -->
+        <!-- SCROLLABLE MAIN CONTENT -->
         <section class="flex-1 overflow-y-auto">
           <div class="mx-auto w-full max-w-5xl px-5 py-10 md:px-10 md:py-14">
-            <!-- Welcome -->
-            <div class="mx-auto max-w-3xl text-center">
-              <div
-                class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-[#315b57] bg-[#1b3533] text-[#9de0d4] shadow-lg shadow-black/20"
-              >
-                <svg
-                  class="h-8 w-8"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  stroke-width="1.6"
+            <!-- =================================
+                  HOME VIEW
+            ================================== -->
+            <div id="homeView">
+              <!-- Welcome -->
+              <div class="mx-auto max-w-3xl text-center">
+                <div
+                  class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-[#315b57] bg-[#1b3533] text-[#9de0d1] shadow-lg shadow-black/20"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M12 3v2m0 14v2M3 12h2m14 0h2M5.64 5.64l1.42 1.42m9.88 9.88 1.42 1.42m0-12.72-1.42 1.42m-9.88 9.88-1.42 1.42M8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z"
-                  />
-                </svg>
-              </div>
+                  <svg
+                    class="h-8 w-8"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 3v2m0 14v2M3 12h2m14 0h2M5.64 5.64l1.42 1.42m9.88 9.88 1.42 1.42m0-12.72-1.42 1.42m-9.88 9.88-1.42 1.42M8 12a4 4 0 1 0 8 0 4 4 0 0 0-8 0Z"
+                    />
+                  </svg>
+                </div>
 
-              <p class="mb-3 text-sm font-medium text-[#91d6ca]">
-                SMARTER FINANCIAL DECISIONS START HERE
-              </p>
+                <p class="mb-3 text-sm font-medium text-[#91d6ca]">
+                  SMARTER FINANCIAL DECISIONS START HERE
+                </p>
 
-              <h2
-                class="text-3xl font-bold leading-tight tracking-tight text-white md:text-5xl"
-              >
-                Your money questions,
-                <span class="text-[#83cfc1]">made simpler.</span>
-              </h2>
-
-              <p
-                class="mx-auto mt-5 max-w-xl text-sm leading-7 text-slate-400 md:text-base"
-              >
-                Ask questions about banking, loans, savings and personal
-                finance. Get clear, simple and helpful guidance whenever you
-                need it.
-              </p>
-            </div>
-
-            <!-- Suggested questions -->
-            <div id="quick-questions" class="mx-auto mt-12 max-w-3xl">
-              <div class="mb-4 flex items-center justify-between">
-                <h3 class="text-sm font-semibold text-slate-200">
-                  Try asking something
-                </h3>
-                <span class="text-xs text-slate-500">Suggested questions</span>
-              </div>
-
-              <div class="grid gap-3 sm:grid-cols-2">
-                <button
-                  data-prompt="What is the difference between a savings account and a current account?"
-                  class="prompt-card rounded-xl border border-[#293542] bg-[#171f29] p-4 text-left transition hover:border-[#477d75] hover:bg-[#1c2b31]"
+                <h2
+                  class="text-3xl font-bold leading-tight tracking-tight text-white md:text-5xl"
                 >
-                  <span class="text-lg text-[#8dd7c9]">◈</span>
-                  <p class="mt-3 text-sm font-medium text-slate-200">
-                    Banking basics
-                  </p>
-                  <p class="mt-1 text-xs leading-5 text-slate-500">
-                    Understand different bank accounts
-                  </p>
-                </button>
+                  Your money questions,
+                  <span class="text-[#83cfc1]">made simpler.</span>
+                </h2>
 
-                <button
-                  data-prompt="How can I calculate my monthly loan EMI?"
-                  class="prompt-card rounded-xl border border-[#293542] bg-[#171f29] p-4 text-left transition hover:border-[#477d75] hover:bg-[#1c2b31]"
+                <p
+                  class="mx-auto mt-5 max-w-xl text-sm leading-7 text-slate-400 md:text-base"
                 >
-                  <span class="text-lg text-[#8dd7c9]">▤</span>
-                  <p class="mt-3 text-sm font-medium text-slate-200">
-                    Loan assistance
-                  </p>
-                  <p class="mt-1 text-xs leading-5 text-slate-500">
-                    Learn about EMI and loan payments
-                  </p>
-                </button>
-
-                <button
-                  data-prompt="How can I create a monthly budget?"
-                  class="prompt-card rounded-xl border border-[#293542] bg-[#171f29] p-4 text-left transition hover:border-[#477d75] hover:bg-[#1c2b31]"
-                >
-                  <span class="text-lg text-[#8dd7c9]">◫</span>
-                  <p class="mt-3 text-sm font-medium text-slate-200">
-                    Budget planning
-                  </p>
-                  <p class="mt-1 text-xs leading-5 text-slate-500">
-                    Manage income and expenses
-                  </p>
-                </button>
-
-                <button
-                  data-prompt="How can I identify and avoid UPI payment scams?"
-                  class="prompt-card rounded-xl border border-[#293542] bg-[#171f29] p-4 text-left transition hover:border-[#477d75] hover:bg-[#1c2b31]"
-                >
-                  <span class="text-lg text-[#8dd7c9]">◇</span>
-                  <p class="mt-3 text-sm font-medium text-slate-200">
-                    Fraud awareness
-                  </p>
-                  <p class="mt-1 text-xs leading-5 text-slate-500">
-                    Learn how to stay financially safe
-                  </p>
-                </button>
-              </div>
-            </div>
-
-            <!-- Finance tools -->
-            <div id="tools" class="mx-auto mt-12 max-w-3xl">
-              <div class="mb-4">
-                <h3 class="text-sm font-semibold text-slate-200">
-                  Explore finance tools
-                </h3>
-                <p class="mt-1 text-xs text-slate-500">
-                  Useful calculators for everyday financial planning
+                  Ask questions about banking, loans, savings and personal
+                  finance. Get clear, simple and helpful guidance whenever you
+                  need it.
                 </p>
               </div>
 
-              <div class="grid gap-3 sm:grid-cols-3">
-                <div
-                  class="rounded-xl border border-[#293542] bg-[#171f29] p-4"
-                >
-                  <span class="text-xl text-[#8dd7c9]">₹</span>
-                  <h4 class="mt-3 text-sm font-semibold text-slate-200">
-                    EMI Calculator
-                  </h4>
-                  <p class="mt-1 text-xs leading-5 text-slate-500">
-                    Estimate monthly loan payments.
-                  </p>
-                </div>
-
-                <div
-                  class="rounded-xl border border-[#293542] bg-[#171f29] p-4"
-                >
-                  <span class="text-xl text-[#8dd7c9]">%</span>
-                  <h4 class="mt-3 text-sm font-semibold text-slate-200">
-                    Interest Calculator
-                  </h4>
-                  <p class="mt-1 text-xs leading-5 text-slate-500">
-                    Calculate simple and compound interest.
-                  </p>
-                </div>
-
-                <div
-                  class="rounded-xl border border-[#293542] bg-[#171f29] p-4"
-                >
-                  <span class="text-xl text-[#8dd7c9]">▥</span>
-                  <h4 class="mt-3 text-sm font-semibold text-slate-200">
-                    Budget Planner
-                  </h4>
-                  <p class="mt-1 text-xs leading-5 text-slate-500">
-                    Understand your monthly budget.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <!-- Safety information -->
-            <div
-              id="safety"
-              class="mx-auto mt-8 max-w-3xl rounded-xl border border-[#3b3b30] bg-[#24251f] p-4"
-            >
-              <div class="flex items-start gap-3">
-                <span class="text-xl text-amber-300">!</span>
-                <div>
-                  <h3 class="text-sm font-semibold text-amber-100">
-                    Your financial safety matters
+              <!-- Suggested Questions -->
+              <div id="quick-questions" class="mx-auto mt-12 max-w-3xl">
+                <div class="mb-4 flex items-center justify-between">
+                  <h3 class="text-sm font-semibold text-slate-200">
+                    Try asking something
                   </h3>
-                  <p class="mt-1 text-xs leading-5 text-slate-400">
-                    Never share your OTP, UPI PIN, ATM PIN, CVV or banking
-                    password. Our assistant will never ask you for these
-                    details.
+                  <span class="text-xs text-slate-500">
+                    Suggested questions
+                  </span>
+                </div>
+
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <button
+                    data-prompt="What is the difference between a savings account and a current account?"
+                    class="prompt-card rounded-xl border border-[#293542] bg-[#171f29] p-4 text-left transition hover:border-[#477d75] hover:bg-[#1c2b31]"
+                  >
+                    <span class="text-lg text-[#8dd7c9]">◈</span>
+                    <p class="mt-3 text-sm font-medium text-slate-200">
+                      Banking basics
+                    </p>
+                    <p class="mt-1 text-xs leading-5 text-slate-500">
+                      Understand different bank accounts
+                    </p>
+                  </button>
+
+                  <button
+                    data-prompt="How can I calculate my monthly loan EMI?"
+                    class="prompt-card rounded-xl border border-[#293542] bg-[#171f29] p-4 text-left transition hover:border-[#477d75] hover:bg-[#1c2b31]"
+                  >
+                    <span class="text-lg text-[#8dd7c9]">▤</span>
+                    <p class="mt-3 text-sm font-medium text-slate-200">
+                      Loan assistance
+                    </p>
+                    <p class="mt-1 text-xs leading-5 text-slate-500">
+                      Learn about EMI and loan payments
+                    </p>
+                  </button>
+
+                  <button
+                    data-prompt="How can I create a monthly budget?"
+                    class="prompt-card rounded-xl border border-[#293542] bg-[#171f29] p-4 text-left transition hover:border-[#477d75] hover:bg-[#1c2b31]"
+                  >
+                    <span class="text-lg text-[#8dd7c9]">◫</span>
+                    <p class="mt-3 text-sm font-medium text-slate-200">
+                      Budget planning
+                    </p>
+                    <p class="mt-1 text-xs leading-5 text-slate-500">
+                      Manage income and expenses
+                    </p>
+                  </button>
+
+                  <button
+                    data-prompt="How can I identify and avoid UPI payment scams?"
+                    class="prompt-card rounded-xl border border-[#293542] bg-[#171f29] p-4 text-left transition hover:border-[#477d75] hover:bg-[#1c2b31]"
+                  >
+                    <span class="text-lg text-[#8dd7c9]">◇</span>
+                    <p class="mt-3 text-sm font-medium text-slate-200">
+                      Fraud awareness
+                    </p>
+                    <p class="mt-1 text-xs leading-5 text-slate-500">
+                      Learn how to stay financially safe
+                    </p>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Finance Tools Preview -->
+              <div id="tools" class="mx-auto mt-12 max-w-3xl">
+                <div class="mb-4">
+                  <h3 class="text-sm font-semibold text-slate-200">
+                    Explore finance tools
+                  </h3>
+                  <p class="mt-1 text-xs text-slate-500">
+                    Useful calculators for everyday financial planning
+                  </p>
+                </div>
+
+                <div class="grid gap-3 sm:grid-cols-3">
+                  <div
+                    class="rounded-xl border border-[#293542] bg-[#171f29] p-4"
+                  >
+                    <span class="text-xl text-[#8dd7c9]">₹</span>
+                    <h4 class="mt-3 text-sm font-semibold text-slate-200">
+                      EMI Calculator
+                    </h4>
+                    <p class="mt-1 text-xs leading-5 text-slate-500">
+                      Estimate monthly loan payments.
+                    </p>
+                  </div>
+
+                  <div
+                    class="rounded-xl border border-[#293542] bg-[#171f29] p-4"
+                  >
+                    <span class="text-xl text-[#8dd7c9]">%</span>
+                    <h4 class="mt-3 text-sm font-semibold text-slate-200">
+                      Interest Calculator
+                    </h4>
+                    <p class="mt-1 text-xs leading-5 text-slate-500">
+                      Calculate simple and compound interest.
+                    </p>
+                  </div>
+
+                  <div
+                    class="rounded-xl border border-[#293542] bg-[#171f29] p-4"
+                  >
+                    <span class="text-xl text-[#8dd7c9]">▥</span>
+                    <h4 class="mt-3 text-sm font-semibold text-slate-200">
+                      Budget Planner
+                    </h4>
+                    <p class="mt-1 text-xs leading-5 text-slate-500">
+                      Understand your monthly budget.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Safety Preview -->
+              <div
+                id="safety"
+                class="mx-auto mt-8 max-w-3xl rounded-xl border border-[#3b3b30] bg-[#24251f] p-4"
+              >
+                <div class="flex items-start gap-3">
+                  <span class="text-xl text-amber-300">!</span>
+
+                  <div>
+                    <h3 class="text-sm font-semibold text-amber-100">
+                      Your financial safety matters
+                    </h3>
+
+                    <p class="mt-1 text-xs leading-5 text-slate-400">
+                      Never share your OTP, UPI PIN, ATM PIN, CVV or banking
+                      password. Our assistant will never ask you for these
+                      details.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- END HOME VIEW -->
+
+            <!-- =================================
+                  CHAT VIEW
+            ================================== -->
+            <div id="chatView" class="hidden">
+              <div class="mb-6">
+                <h2 class="text-xl font-semibold text-white">AI Assistant</h2>
+                <p class="mt-1 text-sm text-slate-400">
+                  Ask your banking and finance questions.
+                </p>
+              </div>
+
+              <!-- Only ONE chatMessages element -->
+              <div id="chatMessages" class="space-y-4"></div>
+            </div>
+
+            <!-- =================================
+                FINANCE TOOLS VIEW
+            ================================== -->
+            <div id="financeView" class="hidden">
+              <h2 class="text-2xl font-bold text-white">Finance Tools</h2>
+
+              <p class="mt-2 text-sm text-slate-400">
+                Explore calculators to understand your finances.
+              </p>
+
+              <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div
+                  class="rounded-xl border border-[#293542] bg-[#171f29] p-5 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[#65b9aa] hover:shadow-lg"
+                  data-calculator="emi"
+                >
+                  <span class="text-2xl text-[#8dd7c9]">₹</span>
+                  <h3 class="mt-3 font-semibold text-white">EMI Calculator</h3>
+                  <p class="mt-2 text-sm text-slate-400">
+                    Calculate monthly loan payments.
+                  </p>
+                </div>
+
+                <div
+                  class="rounded-xl border border-[#293542] bg-[#171f29] p-5 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[#65b9aa] hover:shadow-lg"
+                  data-calculator="simple-interest"
+                >
+                  <span class="text-2xl text-[#8dd7c9]">%</span>
+                  <h3 class="mt-3 font-semibold text-white">Simple Interest</h3>
+                  <p class="mt-2 text-sm text-slate-400">
+                    Calculate simple interest and total amount.
+                  </p>
+                </div>
+
+                <div
+                  class="rounded-xl border border-[#293542] bg-[#171f29] p-5 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[#65b9aa] hover:shadow-lg"
+                >
+                  <span class="text-2xl text-[#8dd7c9]">%</span>
+                  <h3 class="mt-3 font-semibold text-white">
+                    Compound Interest
+                  </h3>
+                  <p class="mt-2 text-sm text-slate-400">
+                    Calculate compound interest and growth.
+                  </p>
+                </div>
+
+                <div
+                  class="rounded-xl border border-[#293542] bg-[#171f29] p-5 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[#65b9aa] hover:shadow-lg"
+                >
+                  <span class="text-2xl text-[#8dd7c9]">▥</span>
+                  <h3 class="mt-3 font-semibold text-white">Budget Planner</h3>
+                  <p class="mt-2 text-sm text-slate-400">
+                    Analyse income and monthly expenses.
+                  </p>
+                </div>
+
+                <div
+                  class="rounded-xl border border-[#293542] bg-[#171f29] p-5 cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:border-[#65b9aa] hover:shadow-lg"
+                >
+                  <span class="text-2xl text-[#8dd7c9]">⌂</span>
+                  <h3 class="mt-3 font-semibold text-white">
+                    Loan Eligibility
+                  </h3>
+                  <p class="mt-2 text-sm text-slate-400">
+                    Estimate your possible loan eligibility.
                   </p>
                 </div>
               </div>
             </div>
 
-            <!-- Chat messages will appear here -->
-            <div
-              id="chatMessages"
-              class="mx-auto mt-8 hidden max-w-3xl space-y-4"
-            ></div>
+            <!-- =================================
+                FAQ VIEW
+            ================================== -->
+            <div id="faqView" class="hidden">
+              <h2 class="text-2xl font-bold text-white">Financial FAQs</h2>
+
+              <p class="mt-2 text-sm text-slate-400">
+                Find answers to common banking and finance questions.
+              </p>
+
+              <div id="faqContainer" class="mt-8 space-y-4">
+                <p class="text-sm text-slate-400">Loading FAQs...</p>
+              </div>
+            </div>
+
+            <!-- =================================
+                SAFETY CENTRE VIEW
+            ================================== -->
+            <div id="safetyView" class="hidden">
+              <h2 class="text-2xl font-bold text-white">
+                Financial Safety Centre
+              </h2>
+
+              <p class="mt-2 text-sm text-slate-400">
+                Learn how to protect yourself from financial fraud and online
+                scams.
+              </p>
+
+              <div
+                class="mt-6 rounded-xl border border-[#66512d] bg-[#24251f] p-5"
+              >
+                <h3 class="font-semibold text-amber-200">
+                  Important safety reminder
+                </h3>
+
+                <p class="mt-2 text-sm leading-6 text-slate-300">
+                  Never share your OTP, UPI PIN, ATM PIN, CVV or banking
+                  password. Your bank will never ask you to disclose these
+                  confidential details.
+                </p>
+              </div>
+
+              <div id="safetyContainer" class="mt-6 space-y-4">
+                <p class="text-sm text-slate-400">
+                  Loading safety information...
+                </p>
+              </div>
+
+              <div
+                class="mt-6 rounded-xl border border-[#34424f] bg-[#171f29] p-5"
+              >
+                <h3 class="font-semibold text-white">
+                  Report financial cyber fraud in India
+                </h3>
+
+                <p class="mt-2 text-sm text-slate-400">
+                  Call 1930 immediately or report at the National Cyber Crime
+                  Reporting Portal.
+                </p>
+
+                <a
+                  href="https://cybercrime.gov.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="mt-4 inline-block text-sm font-semibold text-[#8dd7c9] hover:underline"
+                >
+                  Visit Cyber Crime Portal →
+                </a>
+              </div>
+            </div>
           </div>
         </section>
 
         <!-- Message composer -->
         <footer
+          id="chatFooter"
           class="shrink-0 border-t border-[#26313d] bg-[#10151c] px-5 py-5 md:px-8"
         >
           <div class="mx-auto max-w-3xl">
@@ -439,6 +587,6 @@
       </main>
     </div>
 
-    <script src="./src/js/app.js"></script>
+    <script type="module" src="./src/js/app.js"></script>
   </body>
 </html>
