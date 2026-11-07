@@ -7,6 +7,7 @@ import simpleInterestRoutes from "./routes/simpleInterest.route.js";
 import compoundInterestRoutes from "./routes/compoundInterest.route.js";
 import budgetRoutes from "./routes/budget.route.js";
 import faqRoutes from "./routes/faq.route.js";
+import safetyRoutes from "./routes/safety.route.js";
 
 import {
   helmetMiddleware,
@@ -57,5 +58,8 @@ app.use("/api/budget", budgetRoutes);
 
 // Financial FAQ API
 app.use("/api/faq", faqRoutes);
+
+// Financial Safety and Scam Awareness API
+app.use("/api/safety", safetyRoutes);
 
 export default app;

@@ -109,6 +109,38 @@ const fraudPatterns = [
   /\bdigital payment fraud\b/i,
   /\bcyber fraud\b/i,
   /\bcybercrime\b/i,
+
+  // OTP, PIN and password scams
+  /\botp scam\b/i,
+  /\botp fraud\b/i,
+  /\bshare (?:your )?otp\b/i,
+  /\bupi pin scam\b/i,
+  /\batm pin scam\b/i,
+  /\bpassword theft\b/i,
+  /\bcredential theft\b/i,
+
+  // Phishing and fake banking communication
+  /\bfake kyc\b/i,
+  /\bkyc fraud\b/i,
+  /\bkyc scam\b/i,
+  /\bfake bank call\b/i,
+  /\bfake customer care\b/i,
+  /\bfake customer support\b/i,
+  /\bsuspicious link\b/i,
+  /\bfake website\b/i,
+
+  // Card and ATM scams
+  /\batm skimming\b/i,
+  /\bcard skimming\b/i,
+  /\bcard cloning\b/i,
+  /\bstolen card\b/i,
+
+  // Investment and remote access scams
+  /\bfake investment\b/i,
+  /\binvestment scam\b/i,
+  /\bguaranteed returns\b/i,
+  /\bremote access scam\b/i,
+  /\bscreen sharing fraud\b/i,
 ];
 
 // Common financial terms that need additional context
