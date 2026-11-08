@@ -20,6 +20,54 @@ calculatorWorkspace.className = "mt-8";
 
 financeView.appendChild(calculatorWorkspace);
 
+// ==============================
+// EMI FIELD VALIDATION
+// ==============================
+
+const validateEMIField = (input) => {
+  const errorElement = calculatorWorkspace.querySelector(
+    `[data-error-for="${input.name}"]`,
+  );
+
+  let message = "";
+
+  if (input.validity.valueMissing) {
+    message = "This field is required.";
+  } else if (input.validity.badInput) {
+    message = "Please enter a valid number.";
+  } else if (input.validity.rangeUnderflow) {
+    message =
+      input.name === "tenureMonths"
+        ? "Loan tenure must be at least 1 month."
+        : "Value must be greater than 0.";
+  } else if (input.validity.rangeOverflow) {
+    message =
+      input.name === "tenureMonths"
+        ? "Loan tenure cannot exceed 1200 months."
+        : input.name === "annualInterestRate"
+          ? "Interest rate cannot exceed 1000%."
+          : "Loan amount exceeds the maximum allowed value.";
+  } else if (input.validity.stepMismatch) {
+    message =
+      input.name === "tenureMonths"
+        ? "Loan tenure must be a whole number."
+        : "Please enter a valid value.";
+  }
+
+  input.classList.toggle("border-red-500", Boolean(message));
+  input.classList.toggle("border-[#34424f]", !message);
+
+  input.setAttribute("aria-invalid", message ? "true" : "false");
+
+  if (errorElement) {
+    errorElement.textContent = message ? `⚠ ${message}` : "";
+    errorElement.classList.toggle("hidden", !message);
+    errorElement.classList.toggle("flex", Boolean(message));
+  }
+
+  return !message;
+};
+
 // DISPLAY EMI FORM
 const showEMIForm = () => {
   calculatorWorkspace.innerHTML = `
@@ -35,7 +83,7 @@ const showEMIForm = () => {
         </p>
       </div>
 
-      <form id="emiForm" class="space-y-5">
+      <form id="emiForm" class="space-y-5" novalidate>
 
         <div>
           <label class="mb-2 block text-sm text-slate-300">
@@ -54,6 +102,11 @@ const showEMIForm = () => {
           />
         </div>
 
+        <p
+  data-error-for="loanAmount"
+  class="mt-2 hidden items-center gap-2 text-xs text-red-400"
+></p>
+
         <div>
           <label class="mb-2 block text-sm text-slate-300">
             Annual Interest Rate (%)
@@ -70,6 +123,10 @@ const showEMIForm = () => {
             class="w-full rounded-lg border border-[#34424f] bg-[#111923] px-4 py-3 text-white outline-none focus:border-[#65b9aa]"
           />
         </div>
+        <p
+  data-error-for="annualInterestRate"
+  class="mt-2 hidden items-center gap-2 text-xs text-red-400"
+></p>
 
         <div>
           <label class="mb-2 block text-sm text-slate-300">
@@ -87,6 +144,10 @@ const showEMIForm = () => {
             class="w-full rounded-lg border border-[#34424f] bg-[#111923] px-4 py-3 text-white outline-none focus:border-[#65b9aa]"
           />
         </div>
+        <p
+  data-error-for="tenureMonths"
+  class="mt-2 hidden items-center gap-2 text-xs text-red-400"
+></p>
 
         <button
           type="submit"
@@ -101,6 +162,23 @@ const showEMIForm = () => {
 
     </div>
   `;
+  const emiForm = document.getElementById("emiForm");
+
+  emiForm.addEventListener("input", (event) => {
+    if (event.target.matches("input")) {
+      validateEMIField(event.target);
+    }
+  });
+
+  emiForm.addEventListener(
+    "blur",
+    (event) => {
+      if (event.target.matches("input")) {
+        validateEMIField(event.target);
+      }
+    },
+    true,
+  );
 
   calculatorWorkspace.scrollIntoView({
     behavior: "smooth",
@@ -126,6 +204,19 @@ calculatorWorkspace.addEventListener("submit", async (event) => {
   const form = event.target;
   const submitButton = form.querySelector('button[type="submit"]');
   const resultContainer = document.getElementById("emiResult");
+
+  const fields = [
+    form.elements.loanAmount,
+    form.elements.annualInterestRate,
+    form.elements.tenureMonths,
+  ];
+
+  const invalidFields = fields.filter((input) => !validateEMIField(input));
+
+  if (invalidFields.length > 0) {
+    invalidFields[0].focus();
+    return;
+  }
 
   const emiData = {
     loanAmount: Number(form.elements.loanAmount.value),
@@ -203,6 +294,106 @@ calculatorWorkspace.addEventListener("submit", async (event) => {
 });
 
 // ==============================
+// REUSABLE FINANCE FORM VALIDATION
+// ==============================
+
+const validateFinanceField = (field) => {
+  let errorElement = field.parentElement.querySelector(
+    ":scope > [data-field-error]",
+  );
+
+  if (!errorElement) {
+    errorElement = document.createElement("p");
+    errorElement.dataset.fieldError = "true";
+    errorElement.className =
+      "mt-2 flex items-center gap-2 text-xs text-red-400";
+
+    field.insertAdjacentElement("afterend", errorElement);
+  }
+
+  let message = "";
+
+  if (field.validity.valueMissing) {
+    message = "This field is required.";
+  } else if (field.validity.badInput) {
+    message = "Please enter a valid number.";
+  } else if (field.type === "text" && field.required && !field.value.trim()) {
+    message = "Please enter a category.";
+  } else if (field.validity.rangeUnderflow) {
+    message = `Value must be at least ${field.min}.`;
+  } else if (field.validity.rangeOverflow) {
+    message = `Value cannot exceed ${field.max}.`;
+  } else if (field.validity.stepMismatch) {
+    message =
+      field.step === "1"
+        ? "Please enter a whole number."
+        : "Please enter a valid value.";
+  }
+
+  field.classList.toggle("border-red-500", Boolean(message));
+  field.classList.toggle("border-[#34424f]", !message);
+
+  field.setAttribute("aria-invalid", message ? "true" : "false");
+
+  errorElement.textContent = message ? `⚠ ${message}` : "";
+  errorElement.classList.toggle("hidden", !message);
+
+  return !message;
+};
+
+const validateFinanceForm = (form) => {
+  const fields = [...form.querySelectorAll("input, select, textarea")];
+
+  const invalidFields = fields.filter((field) => !validateFinanceField(field));
+
+  if (invalidFields.length > 0) {
+    invalidFields[0].focus();
+    return false;
+  }
+
+  return true;
+};
+
+const setupFinanceValidation = (form) => {
+  form.setAttribute("novalidate", "");
+
+  // Keep expense input and its error message together.
+  form.querySelectorAll(".expense-row input").forEach((input) => {
+    if (input.parentElement.classList.contains("finance-field")) {
+      return;
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "finance-field min-w-0";
+
+    input.parentElement.insertBefore(wrapper, input);
+    wrapper.appendChild(input);
+  });
+
+  form.addEventListener("input", (event) => {
+    if (event.target.matches("input, select, textarea")) {
+      validateFinanceField(event.target);
+    }
+  });
+
+  form.addEventListener("change", (event) => {
+    if (event.target.matches("input, select, textarea")) {
+      validateFinanceField(event.target);
+    }
+  });
+
+  form.addEventListener(
+    "focusout",
+    (event) => {
+      if (event.target.matches("input, select, textarea")) {
+        validateFinanceField(event.target);
+      }
+    },
+    true,
+  );
+};
+
+// ==============================
 // SIMPLE INTEREST CALCULATOR
 // ==============================
 
@@ -221,7 +412,7 @@ const showSimpleInterestForm = () => {
         </p>
       </div>
 
-      <form id="simpleInterestForm" class="space-y-5">
+      <form id="simpleInterestForm" class="space-y-5" novalidate>
 
         <div>
           <label class="mb-2 block text-sm text-slate-300">
@@ -288,6 +479,8 @@ const showSimpleInterestForm = () => {
     </div>
   `;
 
+  setupFinanceValidation(document.getElementById("simpleInterestForm"));
+
   calculatorWorkspace.scrollIntoView({
     behavior: "smooth",
     block: "start",
@@ -312,6 +505,10 @@ calculatorWorkspace.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const form = event.target;
+
+  if (!validateFinanceForm(form)) {
+    return;
+  }
   const submitButton = form.querySelector('button[type="submit"]');
   const resultContainer = document.getElementById("simpleInterestResult");
 
@@ -408,7 +605,7 @@ const showCompoundInterestForm = () => {
         </p>
       </div>
 
-      <form id="compoundInterestForm" class="space-y-5">
+      <form id="compoundInterestForm" class="space-y-5" novalidate>
 
         <div>
           <label class="mb-2 block text-sm text-slate-300">
@@ -493,6 +690,8 @@ const showCompoundInterestForm = () => {
     </div>
   `;
 
+  setupFinanceValidation(document.getElementById("compoundInterestForm"));
+
   calculatorWorkspace.scrollIntoView({
     behavior: "smooth",
     block: "start",
@@ -517,9 +716,11 @@ calculatorWorkspace.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const form = event.target;
+  if (!validateFinanceForm(form)) {
+    return;
+  }
 
   const submitButton = form.querySelector('button[type="submit"]');
-
   const resultContainer = document.getElementById("compoundInterestResult");
 
   const interestData = {
@@ -616,7 +817,7 @@ const showBudgetForm = () => {
         </p>
       </div>
 
-      <form id="budgetForm" class="space-y-5">
+      <form id="budgetForm" class="space-y-5" novalidate>
 
         <div>
           <label class="mb-2 block text-sm text-slate-300">
@@ -706,6 +907,8 @@ const showBudgetForm = () => {
     </div>
   `;
 
+  setupFinanceValidation(document.getElementById("budgetForm"));
+
   calculatorWorkspace.scrollIntoView({
     behavior: "smooth",
     block: "start",
@@ -770,6 +973,15 @@ calculatorWorkspace.addEventListener("click", (event) => {
 
     expenseRows.appendChild(newRow);
 
+    newRow.querySelectorAll("input").forEach((input) => {
+      const wrapper = document.createElement("div");
+
+      wrapper.className = "finance-field min-w-0";
+
+      newRow.insertBefore(wrapper, input);
+      wrapper.appendChild(input);
+    });
+
     document.getElementById("expenseCount").textContent =
       `${expenseCount + 1} / 30`;
 
@@ -808,17 +1020,16 @@ calculatorWorkspace.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const form = event.target;
+  if (!validateFinanceForm(form)) {
+    return;
+  }
 
   const submitButton = form.querySelector('button[type="submit"]');
-
   const resultContainer = document.getElementById("budgetResult");
-
   const monthlyIncome = Number(form.elements.monthlyIncome.value);
-
   const expenseRows = [
     ...document.querySelectorAll("#expenseRows .expense-row"),
   ];
-
   const expenses = [];
 
   for (const row of expenseRows) {
@@ -851,6 +1062,13 @@ calculatorWorkspace.addEventListener("submit", async (event) => {
       category,
       amount,
     });
+  }
+
+  if (expenseRows.length === 0) {
+    resultContainer.textContent =
+      "Please add at least one expense before analysing your budget.";
+
+    return;
   }
 
   if (
@@ -1047,7 +1265,7 @@ const showLoanEligibilityForm = () => {
         </p>
       </div>
 
-      <form id="loanEligibilityForm" class="space-y-5">
+      <form id="loanEligibilityForm" class="space-y-5" novalidate>
 
         <div>
           <label class="mb-2 block text-sm text-slate-300">
@@ -1131,6 +1349,8 @@ const showLoanEligibilityForm = () => {
     </div>
   `;
 
+  setupFinanceValidation(document.getElementById("loanEligibilityForm"));
+
   calculatorWorkspace.scrollIntoView({
     behavior: "smooth",
     block: "start",
@@ -1140,24 +1360,21 @@ const showLoanEligibilityForm = () => {
 // OPEN FORM WHEN LOAN ELIGIBILITY CARD IS CLICKED
 financeView.addEventListener("click", (event) => {
   const loanCard = event.target.closest('[data-calculator="loan-eligibility"]');
-
   if (!loanCard) return;
-
   showLoanEligibilityForm();
 });
 
 // HANDLE LOAN ELIGIBILITY FORM SUBMISSION
 calculatorWorkspace.addEventListener("submit", async (event) => {
   if (event.target.id !== "loanEligibilityForm") return;
-
   event.preventDefault();
 
   const form = event.target;
-
+  if (!validateFinanceForm(form)) {
+    return;
+  }
   const submitButton = form.querySelector('button[type="submit"]');
-
   const resultContainer = document.getElementById("loanEligibilityResult");
-
   const loanData = {
     monthlyIncome: Number(form.elements.monthlyIncome.value),
     existingEMI: Number(form.elements.existingEMI.value),
@@ -1167,12 +1384,10 @@ calculatorWorkspace.addEventListener("submit", async (event) => {
 
   submitButton.disabled = true;
   submitButton.textContent = "Checking Eligibility...";
-
   resultContainer.innerHTML = "";
 
   try {
     const result = await calculateLoanEligibility(loanData);
-
     const formatCurrency = (amount) =>
       new Intl.NumberFormat("en-IN", {
         style: "currency",

@@ -42,6 +42,35 @@ let faqLoaded = false;
 let safetyLoaded = false;
 
 // ==============================
+// REUSABLE ERROR AND RETRY
+// ==============================
+
+const showRetryError = (container, message, retryFunction) => {
+  container.innerHTML = "";
+
+  const wrapper = document.createElement("div");
+
+  wrapper.className = "rounded-xl border border-red-500/30 bg-red-500/10 p-5";
+
+  const errorText = document.createElement("p");
+
+  errorText.className = "text-sm leading-6 text-red-400";
+  errorText.textContent = message || "Something went wrong. Please try again.";
+
+  const retryButton = document.createElement("button");
+
+  retryButton.type = "button";
+  retryButton.textContent = "Try Again";
+  retryButton.className =
+    "mt-4 rounded-lg bg-[#286b65] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#347e76]";
+
+  retryButton.addEventListener("click", retryFunction);
+
+  wrapper.append(errorText, retryButton);
+  container.appendChild(wrapper);
+};
+
+// ==============================
 // MOBILE SIDEBAR
 // ==============================
 
@@ -331,18 +360,9 @@ const loadFAQs = async () => {
 
     faqLoaded = true;
   } catch (error) {
-    container.innerHTML = "";
+    faqLoaded = false;
 
-    const errorMessage = document.createElement("p");
-
-    errorMessage.className =
-      "rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-400";
-
-    errorMessage.textContent = error.message;
-
-    container.appendChild(errorMessage);
-
-    // Keep faqLoaded false so the user can retry by revisiting the view.
+    showRetryError(container, error.message, loadFAQs);
   }
 };
 
@@ -508,6 +528,16 @@ const loadSafetyInformation = async () => {
 
   // Apply search and category filtering together
   const updateSafetyResults = async () => {
+    const keyword = searchInput.value.trim();
+
+    // Do not display all records by default.
+    if (!keyword && selectedCategory === "all") {
+      resultsSection.classList.add("hidden");
+      resultsContainer.innerHTML = "";
+      resultCount.textContent = "";
+      return;
+    }
+
     resultsSection.classList.remove("hidden");
     resultsContainer.textContent = "Searching safety information...";
     resultCount.textContent = "";
@@ -525,7 +555,7 @@ const loadSafetyInformation = async () => {
 
       renderSafetyResults(items);
     } catch (error) {
-      resultsContainer.textContent = error.message;
+      showRetryError(resultsContainer, error.message, updateSafetyResults);
     }
   };
 
@@ -576,8 +606,9 @@ const loadSafetyInformation = async () => {
 
     safetyLoaded = true;
   } catch (error) {
-    resultsContainer.textContent =
-      error.message || "Unable to load Safety Centre information.";
+    safetyLoaded = false;
+    resultsSection.classList.remove("hidden");
+    showRetryError(resultsContainer, error.message, loadSafetyInformation);
   }
 };
 
