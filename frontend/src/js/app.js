@@ -150,9 +150,12 @@ document.querySelectorAll(".prompt-card").forEach((button) => {
 // ==============================
 // DISPLAY CHAT MESSAGES
 // ==============================
-
-// DISPLAY CHAT MESSAGES
-const addMessage = (message, sender) => {
+const addMessage = (
+  message,
+  sender,
+  shouldSave = true,
+  shouldScroll = true,
+) => {
   const messageWrapper = document.createElement("div");
 
   messageWrapper.className =
@@ -172,7 +175,7 @@ const addMessage = (message, sender) => {
 
   messageContent.appendChild(messageBubble);
 
-  // COPY BUTTON FOR AI RESPONSES ONLY
+  // Copy button for AI responses
   if (sender === "assistant") {
     const copyButton = document.createElement("button");
 
@@ -201,13 +204,73 @@ const addMessage = (message, sender) => {
   messageWrapper.appendChild(messageContent);
   chatMessages.appendChild(messageWrapper);
 
-  messageWrapper.scrollIntoView({
-    behavior: "smooth",
-    block: "nearest",
-  });
+  // Save message to LocalStorage
+  if (shouldSave) {
+    chatHistory.push({ message, sender });
+    saveChatHistory();
+  }
+
+  // Scroll only when required
+  if (shouldScroll) {
+    messageWrapper.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
+  }
 
   return messageWrapper;
 };
+
+// ==============================
+// CHAT HISTORY - LOCAL STORAGE
+// ==============================
+
+const CHAT_STORAGE_KEY = "finora-chat-history";
+
+let chatHistory = [];
+
+// Load saved conversation
+const loadChatHistory = () => {
+  try {
+    const savedHistory = localStorage.getItem(CHAT_STORAGE_KEY);
+
+    if (!savedHistory) return;
+
+    const parsedHistory = JSON.parse(savedHistory);
+
+    if (Array.isArray(parsedHistory)) {
+      chatHistory = parsedHistory.filter(
+        (item) =>
+          typeof item.message === "string" &&
+          ["user", "assistant"].includes(item.sender),
+      );
+    }
+  } catch (error) {
+    console.error("Unable to load chat history:", error);
+    chatHistory = [];
+  }
+};
+
+// Save conversation
+const saveChatHistory = () => {
+  try {
+    localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(chatHistory));
+  } catch (error) {
+    console.error("Unable to save chat history:", error);
+  }
+};
+
+// Restore previous conversation
+const restoreChatHistory = () => {
+  loadChatHistory();
+
+  chatHistory.forEach((item) => {
+    addMessage(item.message, item.sender, false, false);
+  });
+};
+
+// Restore saved conversation when the application starts
+restoreChatHistory();
 
 // ==============================
 // LOADING INDICATOR
@@ -300,11 +363,18 @@ messageInput.addEventListener("keydown", (event) => {
 // ==============================
 
 newChatButton.addEventListener("click", () => {
+  // Clear displayed messages
   chatMessages.innerHTML = "";
+
+  // Clear saved conversation
+  chatHistory = [];
+  localStorage.removeItem(CHAT_STORAGE_KEY);
+
+  // Clear message input
   messageInput.value = "";
 
+  // Return to dashboard
   showView("home");
-
   messageInput.focus();
 });
 

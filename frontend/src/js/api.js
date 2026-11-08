@@ -1,4 +1,8 @@
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://localhost:5000/api"
+    : "https://YOUR-BACKEND-NAME.onrender.com/api";
 
 // Send a message to the Banking & Finance AI backend.
 export const sendChatMessage = async (message) => {
