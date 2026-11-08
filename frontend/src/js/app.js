@@ -1,4 +1,11 @@
-import { sendChatMessage } from "./api.js";
+import {
+  sendChatMessage,
+  getFAQs,
+  getSafetyInformation,
+  getSafetyCategories,
+  searchSafetyInformation,
+  getSafetyEmergency,
+} from "./api.js";
 import "./financeTools.js";
 
 // ==============================
@@ -51,8 +58,6 @@ const closeSidebar = () => {
 openSidebarButton.addEventListener("click", openSidebar);
 closeSidebarButton.addEventListener("click", closeSidebar);
 sidebarBackdrop.addEventListener("click", closeSidebar);
-
-
 
 // ==============================
 // SINGLE PAGE NAVIGATION
@@ -278,21 +283,19 @@ newChatButton.addEventListener("click", () => {
 // LOAD FINANCIAL FAQs
 // ==============================
 
+// ==============================
+// LOAD FINANCIAL FAQs
+// ==============================
+
 const loadFAQs = async () => {
   const container = document.getElementById("faqContainer");
 
+  container.textContent = "Loading FAQs...";
+
   try {
-    const response = await fetch("http://localhost:5000/api/faq");
+    const data = await getFAQs();
 
-    const result = await response.json();
-
-    if (!response.ok || !result.success) {
-      throw new Error("Unable to load FAQs.");
-    }
-
-    const items = Array.isArray(result.data)
-      ? result.data
-      : result.data?.faqs || [];
+    const items = Array.isArray(data) ? data : data?.faqs || [];
 
     if (!items.length) {
       container.textContent = "No FAQs are currently available.";
@@ -309,23 +312,37 @@ const loadFAQs = async () => {
 
       const question = document.createElement("summary");
 
-      question.className = "cursor-pointer font-medium text-slate-200";
+      question.className =
+        "cursor-pointer font-medium text-slate-200 transition hover:text-[#9de0d4]";
 
       question.textContent = faq.question || "Frequently asked question";
 
       const answer = document.createElement("p");
 
-      answer.className = "mt-4 text-sm leading-7 text-slate-400";
+      answer.className =
+        "mt-4 whitespace-pre-wrap text-sm leading-7 text-slate-400";
 
       answer.textContent = faq.answer || "Answer is currently unavailable.";
 
       card.append(question, answer);
+
       container.appendChild(card);
     });
 
     faqLoaded = true;
   } catch (error) {
-    container.textContent = error.message;
+    container.innerHTML = "";
+
+    const errorMessage = document.createElement("p");
+
+    errorMessage.className =
+      "rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-400";
+
+    errorMessage.textContent = error.message;
+
+    container.appendChild(errorMessage);
+
+    // Keep faqLoaded false so the user can retry by revisiting the view.
   }
 };
 
@@ -336,58 +353,231 @@ const loadFAQs = async () => {
 const loadSafetyInformation = async () => {
   const container = document.getElementById("safetyContainer");
 
-  try {
-    const response = await fetch("http://localhost:5000/api/safety");
+  container.innerHTML = `
+    <!-- Find Safety Guidance -->
+    <section class="rounded-xl border border-[#293542] bg-[#171f29] p-5">
+      <h3 class="font-semibold text-white">Find Safety Guidance</h3>
+      <p class="mt-2 text-sm text-slate-400">
+        Search for financial scams or select a safety category.
+      </p>
 
-    const result = await response.json();
+      <form id="safetySearchForm" class="mt-4 flex flex-col gap-3 sm:flex-row">
+        <input
+          id="safetySearchInput"
+          type="search"
+          placeholder="Search UPI fraud, OTP scams, phishing..."
+          class="min-w-0 flex-1 rounded-lg border border-[#34424f] bg-[#101820] px-4 py-3 text-sm text-white outline-none focus:border-[#8dd7c9]"
+        />
+        <button
+          type="submit"
+          class="rounded-lg bg-[#286b65] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#328078]"
+        >
+          Search
+        </button>
+      </form>
 
-    if (!response.ok || !result.success) {
-      throw new Error("Unable to load safety information.");
-    }
+      <div class="mt-3">
+        <label for="safetyCategoryFilter" class="mb-2 block text-sm text-slate-400">
+          Filter by category
+        </label>
+        <select
+          id="safetyCategoryFilter"
+          class="w-full rounded-lg border border-[#34424f] bg-[#101820] px-4 py-3 text-sm text-white outline-none focus:border-[#8dd7c9]"
+        >
+          <option value="all">All Categories</option>
+        </select>
+      </div>
+    </section>
 
-    const items = Array.isArray(result.data)
-      ? result.data
-      : result.data?.items || [];
+    <!-- Safety Information Results -->
+    <section id="safetyResultsSection" class="mt-6 hidden">
+  <div class="mb-4 flex items-center justify-between gap-3">
+    <h3 class="font-semibold text-white">Safety Information</h3>
+    <span id="safetyResultCount" class="text-xs text-slate-400"></span>
+  </div>
+
+  <div id="safetyResults" class="space-y-4"></div>
+</section>
+
+    <!-- Emergency Guidance: Always after search results -->
+    <section id="safetyEmergencyCard"
+      class="mt-6 rounded-xl border border-red-500/30 bg-red-500/5 p-5">
+      <h3 id="emergencyTitle" class="font-semibold text-red-300">
+        Financial Cyber Fraud – Emergency Guidance
+      </h3>
+      <p class="mt-2 text-xs text-slate-400">India</p>
+
+      <ol id="emergencySteps"
+        class="mt-4 list-decimal space-y-3 pl-5 text-sm leading-6 text-slate-300">
+      </ol>
+
+      <p id="emergencyNote"
+        class="mt-4 rounded-lg bg-red-500/10 p-3 text-sm leading-6 text-red-200">
+      </p>
+    </section>
+  `;
+
+  const searchForm = document.getElementById("safetySearchForm");
+  const searchInput = document.getElementById("safetySearchInput");
+  const categoryFilter = document.getElementById("safetyCategoryFilter");
+  const resultsContainer = document.getElementById("safetyResults");
+  const resultCount = document.getElementById("safetyResultCount");
+  const resultsSection = document.getElementById("safetyResultsSection");
+
+  let allItems = [];
+  let selectedCategory = "all";
+
+  // Create a safe list of guidance items
+  const createList = (items, heading, className) => {
+    if (!Array.isArray(items) || !items.length) return null;
+
+    const section = document.createElement("div");
+    section.className = "mt-4";
+
+    const title = document.createElement("h4");
+    title.className = "mb-2 text-sm font-semibold text-slate-200";
+    title.textContent = heading;
+
+    const list = document.createElement("ul");
+    list.className = `list-disc space-y-2 pl-5 text-sm leading-6 ${className}`;
+
+    items.forEach((value) => {
+      const li = document.createElement("li");
+      li.textContent = value;
+      list.appendChild(li);
+    });
+
+    section.append(title, list);
+    return section;
+  };
+
+  // Display matching safety records
+  const renderSafetyResults = (items) => {
+    resultsContainer.innerHTML = "";
+    resultCount.textContent = `${items.length} result(s)`;
 
     if (!items.length) {
-      container.textContent = "No safety information is currently available.";
-      safetyLoaded = true;
+      resultsContainer.textContent =
+        "No matching safety information found. Try another keyword or category.";
       return;
     }
 
-    container.innerHTML = "";
-
     items.forEach((item) => {
-      const card = document.createElement("div");
-
+      const card = document.createElement("article");
       card.className = "rounded-xl border border-[#293542] bg-[#171f29] p-5";
 
-      const heading = document.createElement("h3");
+      const category = document.createElement("p");
+      category.className = "text-xs font-medium text-[#8dd7c9]";
+      category.textContent = item.category || "Financial Safety";
 
-      heading.className = "font-semibold text-white";
-
-      heading.textContent =
-        item.title || item.name || item.category || "Safety guidance";
+      const title = document.createElement("h4");
+      title.className = "mt-2 font-semibold text-white";
+      title.textContent = item.title || "Safety Guidance";
 
       const description = document.createElement("p");
+      description.className = "mt-3 text-sm leading-7 text-slate-400";
+      description.textContent = item.description || "";
 
-      description.className =
-        "mt-3 whitespace-pre-wrap text-sm leading-7 text-slate-400";
+      card.append(category, title, description);
 
-      description.textContent =
-        item.description ||
-        item.content ||
-        item.answer ||
-        item.response ||
-        "Follow recommended banking safety practices.";
+      const warningSigns = createList(
+        item.warningSigns,
+        "Warning Signs",
+        "text-amber-300",
+      );
 
-      card.append(heading, description);
-      container.appendChild(card);
+      const whatToDo = createList(
+        item.whatToDo,
+        "What To Do",
+        "text-slate-300",
+      );
+
+      const prevention = createList(
+        item.prevention,
+        "Prevention Tips",
+        "text-[#8dd7c9]",
+      );
+
+      [warningSigns, whatToDo, prevention].forEach((section) => {
+        if (section) card.appendChild(section);
+      });
+
+      resultsContainer.appendChild(card);
     });
+  };
+
+  // Apply search and category filtering together
+  const updateSafetyResults = async () => {
+    resultsSection.classList.remove("hidden");
+    resultsContainer.textContent = "Searching safety information...";
+    resultCount.textContent = "";
+
+    try {
+      const keyword = searchInput.value.trim();
+
+      let items = keyword ? await searchSafetyInformation(keyword) : allItems;
+
+      if (!Array.isArray(items)) items = [];
+
+      if (selectedCategory !== "all") {
+        items = items.filter((item) => item.category === selectedCategory);
+      }
+
+      renderSafetyResults(items);
+    } catch (error) {
+      resultsContainer.textContent = error.message;
+    }
+  };
+
+  try {
+    // Load all three API responses
+    const [safetyData, categories, emergency] = await Promise.all([
+      getSafetyInformation(),
+      getSafetyCategories(),
+      getSafetyEmergency(),
+    ]);
+
+    allItems = Array.isArray(safetyData) ? safetyData : [];
+
+    // Populate category dropdown
+    categories.forEach((category) => {
+      const option = document.createElement("option");
+      option.value = category;
+      option.textContent = category;
+      categoryFilter.appendChild(option);
+    });
+
+    // Search form
+    searchForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      updateSafetyResults();
+    });
+
+    // Category filter
+    categoryFilter.addEventListener("change", () => {
+      selectedCategory = categoryFilter.value;
+      updateSafetyResults();
+    });
+
+    // Render emergency guidance after results
+    document.getElementById("emergencyTitle").textContent =
+      emergency.title || "Financial Cyber Fraud – Emergency Guidance";
+
+    const emergencySteps = document.getElementById("emergencySteps");
+
+    emergency.steps.forEach((step) => {
+      const li = document.createElement("li");
+      li.textContent = step;
+      emergencySteps.appendChild(li);
+    });
+
+    document.getElementById("emergencyNote").textContent =
+      emergency.importantNote || "";
 
     safetyLoaded = true;
   } catch (error) {
-    container.textContent = error.message;
+    resultsContainer.textContent =
+      error.message || "Unable to load Safety Centre information.";
   }
 };
 

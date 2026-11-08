@@ -213,3 +213,116 @@ export const calculateLoanEligibility = async (loanData) => {
     throw error;
   }
 };
+
+// ==============================
+// GET FINANCIAL FAQs
+// ==============================
+export const getFAQs = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/faq`);
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Unable to load FAQs.");
+    }
+
+    return result.data;
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(
+        "Unable to connect to the backend. Please check whether the server is running.",
+      );
+    }
+
+    throw error;
+  }
+};
+
+// ==============================
+// GET FINANCIAL SAFETY INFORMATION
+// ==============================
+export const getSafetyInformation = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/safety`);
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Unable to load safety information.");
+    }
+
+    return result.data;
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(
+        "Unable to connect to the backend. Please check whether the server is running.",
+      );
+    }
+
+    throw error;
+  }
+};
+
+// GET SAFETY CATEGORIES
+export const getSafetyCategories = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/safety/categories`);
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Unable to load safety categories.");
+    }
+
+    return result.data;
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(
+        "Unable to connect to the backend. Please check whether the server is running.",
+      );
+    }
+    throw error;
+  }
+};
+
+// SEARCH SAFETY INFORMATION
+export const searchSafetyInformation = async (keyword) => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/safety/search?keyword=${encodeURIComponent(keyword)}`,
+    );
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Unable to search safety information.");
+    }
+
+    return result.data;
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(
+        "Unable to connect to the backend. Please check whether the server is running.",
+      );
+    }
+    throw error;
+  }
+};
+
+// GET EMERGENCY GUIDANCE
+export const getSafetyEmergency = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/safety/emergency`);
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.message || "Unable to load emergency guidance.");
+    }
+
+    return result.data;
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new Error(
+        "Unable to connect to the backend. Please check whether the server is running.",
+      );
+    }
+    throw error;
+  }
+};
